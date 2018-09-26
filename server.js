@@ -4,5 +4,4 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const request = require("request");
 const cheerio = require("cheerio");
-//const logger = require("logger");
 const app = express();
