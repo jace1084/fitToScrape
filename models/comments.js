@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var Article = require("./article");
+var article = require("./Article");
 
 
 console.log('Running Mongoose Version: ', mongoose.version);
