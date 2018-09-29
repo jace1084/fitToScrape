@@ -24,3 +24,9 @@ request("https://www.indeed.com/jobs?q=&l=San+Francisco%2C+CA", (err, response, 
     console.log(results);
 })
 
+router.get("/", function(req, res) {
+    res.render("index",  {
+         title: 'Mongo Scraper'
+    });
+  });
+
