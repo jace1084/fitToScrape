@@ -5,10 +5,11 @@ const bodyParser = require("body-parser");
 const request = require("request");
 const cheerio = require("cheerio");
 const app = express();
+var path = require("path");
 var PORT = process.env.PORT || 3000
 
-var databaseUrl = "zoo";
-var collections = ["animals"];
+var databaseUrl = "scraper";
+var collections = ["articles"];
 
 var db = mongojs(databaseUrl, collections);
 
@@ -17,8 +18,9 @@ db.on("error", function(error) {
   });
 
   app.get("/", function(req, res) {
-    res.send("Hello world");
-  });
+    res.sendFile(path.join(__dirname, "views/index.html"));
+});
+  
 
 
 
