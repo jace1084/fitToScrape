@@ -1,30 +1,61 @@
 const express = require("express");
-// const exphbs = require("express-handlebars");
-const mongoose = require("mongojs");
+const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const request = require("request");
-const cheerio = require("cheerio");
+var cheerio = require("cheerio");
 const app = express();
 var path = require("path");
 var PORT = process.env.PORT || 3000
+var Comments = require("./models/Comments.js");
+var Article = require("./models/Article.js");
+var Save = require("./models/Save.js");
+var logger = require("morgan");
 
-var databaseUrl = "scraper";
-var collections = ["articles"];
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
-var db = mongojs(databaseUrl, collections);
+// var databaseUrl = "scraper";
+// var collections = ["articles"];
 
-db.on("error", function(error) {
-    console.log("Database Error:", error);
-  });
+app.use(express.static("./public"));
 
-  app.get("/", function(req, res) {
+mongoose.Promise = Promise;
+var dbConnect = process.env.MONGODB_URI || "mongodb://localhost/local";
+if(process.env.MONGODB_URI) {
+    mongoose.connect(process.env.MONGODB_URI)
+} else {
+    mongoose.connect(dbConnect);
+}
+
+var db = mongoose.connection;
+db.on('error',function(err){
+    console.log('Mongoose Error',err);
+});
+db.once('open', function(){
+    console.log("Mongoose connection is successful");
+});
+var exphbs = require("express-handlebars");
+
+app.engine("handlebars", exphbs({
+    defaultLayout: "main"
+}));
+
+app.set("view engine", "handlebars");
+
+app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "views/index.html"));
 });
-  
 
+require("./routes/scrape")(app);
+require("./routes/html.js")(app);
 
+app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "views/index.html"));
+});
 
-
-  app.listen(3000, function() {
+  app.listen(PORT, function() {
     console.log("App running on port 3000!");
   });
