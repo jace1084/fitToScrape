@@ -37,7 +37,7 @@ function displaySaved() {
             deleteArticle.attr("id", data[i]._id);
             deleteArticle.text("Delete");
             var byline = $("<p>");
-            byline.text(data[i].byline);
+            location.text(data[i].location);
             cardActionDiv.append(byline);
             cardActionDiv.append(button);
             cardActionDiv.append(deleteArticle);
