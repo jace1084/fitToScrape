@@ -23,19 +23,26 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("./public"));
 
 mongoose.Promise = Promise;
-var dbConnect = process.env.MONGODB_URI || "mongodb://localhost/local";
-if(process.env.MONGODB_URI) {
-    mongoose.connect(process.env.MONGODB_URI)
-} else {
-    mongoose.connect(dbConnect);
-}
 
-var db = mongoose.connection;
-db.on('error',function(err){
-    console.log('Mongoose Error',err);
+const dbURI = process.env.MONGODB_URI || "mongodb://localhost:27017/jobScrape";
+
+// Database configuration with mongoose
+mongoose.connect(dbURI);
+
+const db = mongoose.connection;
+
+// Show any mongoose errors
+db.on("error", function(error) {
+    console.log("Mongoose Error: ", error);
 });
-db.once('open', function(){
-    console.log("Mongoose connection is successful");
+
+// Once logged in to the db through mongoose, log a success message
+db.once("open", function() {
+    console.log("Mongoose connection successful.");
+    // start the server, listen on port 3000
+    app.listen(PORT, function() {
+        console.log("App running on port" + PORT);
+    })
 });
 var exphbs = require("express-handlebars");
 
