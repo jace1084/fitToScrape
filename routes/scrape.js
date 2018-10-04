@@ -50,27 +50,28 @@ request("https://www.indeed.com/jobs?q=&l=San+Francisco%2C+CA", (err, res, html)
 
 // Get route for  all the articles
 app.get("/articles", function (req, res) {
-Article.find({}, function (error, doc) {
-if (error) {
-console.log(error);
-} else {
-res.send(doc);
-}
-});
-});
+    Article.find({}, function (error, doc) {   
+        if (error) {
+            console.log(error);
+            } else {
+                res.send(doc);
+
+                }
+     });
+ });
 // Get route for  all the articles with the id
 app.get("/articles/:id", function (req, res) {
-Article.find({
-"_id": req.params.id
-})
-.populate("comments")
-.exec(function (error, doc) {
-if (error) {
-    console.log(error)
-} else {
-    res.send(doc);
-}
-});
+    Article.find({
+        "_id": req.params.id
+    })
+    .populate("comments")
+    .exec(function (error, doc) {
+    if (error) {
+        console.log(error)
+    } else {
+        res.send(doc);
+            }
+    });
 });
 
 // get route to return all saved articles
